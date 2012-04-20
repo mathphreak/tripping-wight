@@ -1,0 +1,13 @@
+Demoes simple musical event processing
+
+to create a metronome demo:
+	create a MetronomeSequencer
+	create a MetronomeGenerator
+
+	set the timeEventTarget of the Sequencer to the Generator
+
+	add both things to the Engine
+	
+	set the generator to input to the engine
+	
+	show the spectrum (??)

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/94/trunk/src/tonfall/format/aiff
+END
+AIFFSound.as
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/AIFFSound.as
+END
+AIFF32BitStereo44Khz.as
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/AIFF32BitStereo44Khz.as
+END
+AIFF24BitStereo44Khz.as
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/AIFF24BitStereo44Khz.as
+END
+AIFF16BitStereo44Khz.as
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/AIFF16BitStereo44Khz.as
+END
+AIFF8BitStereo44Khz.as
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/AIFF8BitStereo44Khz.as
+END
+AIFFTags.as
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/AIFFTags.as
+END
+AIFFEncoder.as
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/AIFFEncoder.as
+END
+IAIFFIOStrategy.as
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/87/trunk/src/tonfall/format/aiff/IAIFFIOStrategy.as
+END
+AIFFDecoder.as
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/94/trunk/src/tonfall/format/aiff/AIFFDecoder.as
+END

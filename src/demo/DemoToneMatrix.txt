@@ -1,0 +1,37 @@
+Simple implementation of the Tonematrix
+
+create a new TonematrixSequencer (see below)
+create a PolySynth with the voice of a SimplePolySynthVoiceFactory.INSTANCE (probably a SimplePolySynthVoice)
+create a Delay with the length of a dotted eighth note at whatever BPM this is
+
+set up the GUI
+
+set up the audio:
+	add to the engine's processors the TonematrixSequencer
+	add to the engine's processors the PolySynth
+	add to the engine's processors the Delay
+	
+	PolySynth out => Delay in
+	TonematrixSequencer out => PolySynth in
+	Delay out => master output
+
+this is a TonematrixSequencer:
+	keep track of the note numbers [96,93,91,89,86,84,81,79,77,74,72,69,67,65,62,60]
+	keep track of the on/off status of all the notes
+	
+	set up the pattern to be all off initially
+	
+	to process a block:
+		figure out which sixteenth note we're on
+		figure out which measure that is
+		
+		while we're before the end:
+			if we're after the beginning:
+				for all the notes we could have:
+					if that note is on:
+						create a new TimeEventNote
+						
+						set its position, note number, and duration
+						tell the output about it
+
+			move to the next sixteenth note

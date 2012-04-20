@@ -1,0 +1,17 @@
+Casio RZ-1
+
+I don't know anything about the history of the RZ-1, such as when it was made.
+I needed a simple sequencer for a sound module I had, so I grabbed from a friend.
+It's a very basic drum machine with a few odd features like most casio stuff.
+The sounds include Tom 1, 2 and 3, Bass Drum, Snare, Rim Shot, Open HH, Closed HH, Claps, Cowbell, Ride and Crash.
+It's not velocity sensitive, but it has Accent and Mute pads which can be held down will hitting the pads to increase or decrease the volume and add a small amount of dynamics.
+It also has individual outputs each with their own fader for each sound besides the stereo output.
+The sounds have preset pan positions.  Another interesting feature is the capability for four samples.
+It also has two 'tone' knobs for adjusting the tone of the samples.
+The sequencer has room for 99 patterns which can be recorded realtime or step written and 20 songs which can have 99 steps each.
+The songs can be linked together.  It has MIDI IN/OUT/THRU ports and can send and receive on all 16 channels.
+One last interesting feature is that it can save and load pattern and song data from cassette using its MT terminal.
+
+Brian Redmond
+
+Downloaded for 'Flash on the beach' workshop as footage for a simple drumcomputer (http://machines.hyperreal.org/manufacturers/Casio/RZ-1/samples/tmp/casio-rz1/)
