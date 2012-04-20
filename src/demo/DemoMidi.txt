@@ -1,101 +1,38 @@
-package demo
-{
-	import assets.Midi;
+Demoes Midi
 
-	import tonfall.core.TimeEventContainerSequencer;
-	import tonfall.display.AbstractApplication;
-	import tonfall.format.SoundDecoder;
-	import tonfall.prefab.poly.PolySynth;
+make a SoundSheet
 
-	import flash.events.Event;
-	import flash.events.ProgressEvent;
-	import flash.net.URLRequest;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
+make a TimeEventContainerSequencer (WTF???)
+private const sequencer: TimeEventContainerSequencer = new TimeEventContainerSequencer( Midi.SCHUMANN.toTimeEventContainer( 1.0 / 128.0 ) );
+make a PolySynth with a SoundSheetVoiceFactory from our SoundSheet
 
-	/**
-	 * Demoes Midi
-	 * 
-	 * @author Andre Michelle
-	 */
-	[SWF(width='512',height='48',backgroundColor='0x1b1b1b',frameRate='32',scriptTimeLimit='255')]
-	public final class DemoMidi extends AbstractApplication
-	{
-		private const sheet: SoundSheet = new SoundSheet();
-		
-		private const sequencer: TimeEventContainerSequencer = new TimeEventContainerSequencer( Midi.SCHUMANN.toTimeEventContainer( 1.0 / 128.0 ) );
-		private const generator: PolySynth = new PolySynth( new SoundSheetVoiceFactory( sheet ) );
+clear the PolySynth
+stop playing audio (look where the driver variable came from in the as file)
+restart the audio position
 
-		private const textField: TextField = new TextField();
+if we haven't disposed of the old sound:
+	get rid of it
 
-		private var _mp3: SoundDecoder;
-		private var _inited: Boolean;
+get the new sound (SoundDecoder.MP3_LAME_OFFSET means something)
+tell it to let us know when it makes progress
+and also when it finishes
+and load "load/piano.mp3"
 
-		public function DemoMidi()
-		{
-			textField.defaultTextFormat = new TextFormat( 'Verdana', 11, 0xFFCC00 );
-			addChild( textField );
-			
-			loadSheet( '../load/piano.mp3' );
-//			loadSheet( '../load/strings.mp3' );
-//			loadSheet( '../load/rhodes.mp3' );
-//			loadSheet( '../load/guitar.mp3' );
-//			loadSheet( '../load/accordion.mp3' );
-//			loadSheet( '../load/vibraphone.mp3' );
-		}
+when the sound makes progress:
+	update the UI to reflect that
 
-		private function loadSheet( url: String ): void
-		{
-			generator.clear();
-			driver.running = false;
-			engine.barPosition = 0.0;
-			
-			if( null != _mp3 )
-			{
-				try { _mp3.close(); } catch( e: Error ) {}
-				_mp3 = null;
-			}
+when the sound finishes loading:
+	tell the user how large it is
+	
+	start playing audio
+	
+	tell the sound sheet about the sound
+	
+	if we haven't wired everything:
+		TimeEventContainerSequencer out => PolySynth note in
+		PolySynth out => master output
+		add to the engine's processors both things
 
-			_mp3 = new SoundDecoder( SoundDecoder.MP3_LAME_OFFSET );
-			_mp3.addEventListener( Event.COMPLETE, mp3Complete );
-			_mp3.addEventListener( ProgressEvent.PROGRESS, mp3Progress );
-			_mp3.load( new URLRequest( url ) );
-		}
-
-		private function mp3Progress( event: ProgressEvent ): void
-		{
-			if( 0.0 < event.bytesTotal )
-				textField.text = Math.ceil( ( event.bytesLoaded / event.bytesTotal * 100.0 ) ) + '%';
-		}
-
-		private function mp3Complete( event: Event ): void
-		{
-			textField.text = ( _mp3.bytesTotal >> 10 ) + 'kb';
-			
-			driver.running = true;
-			
-			_mp3.removeEventListener( Event.COMPLETE, mp3Complete );
-			_mp3.removeEventListener( ProgressEvent.PROGRESS, mp3Progress );
-			
-			sheet.setDecoder( _mp3 );
-			
-			if( !_inited )
-			{
-				init();
-			}
-		}
-
-		private function init(): void
-		{
-			sequencer.timeEventTarget = generator;
-			engine.processors.push( sequencer );
-			engine.processors.push( generator );
-			engine.input = generator.signalOutput;
-			
-			_inited = true;
-		}
-	}
-}
 import tonfall.core.Engine;
 import tonfall.core.Memory;
 import tonfall.core.Signal;

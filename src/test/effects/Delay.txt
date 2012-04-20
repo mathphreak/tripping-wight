@@ -17,8 +17,6 @@ to process a block:
 	make a Signal from the delay buffer
 	and an input and an output Signal
 	
-	var n: int = info.numSignals;
-	
 	for each signal in the block:
 		read from the delay buffer
 		

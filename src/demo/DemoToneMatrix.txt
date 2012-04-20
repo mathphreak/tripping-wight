@@ -12,7 +12,7 @@ set up the audio:
 	add to the engine's processors the Delay
 	
 	PolySynth out => Delay in
-	TonematrixSequencer out => PolySynth in
+	TonematrixSequencer out => PolySynth note in
 	Delay out => master output
 
 this is a TonematrixSequencer:
