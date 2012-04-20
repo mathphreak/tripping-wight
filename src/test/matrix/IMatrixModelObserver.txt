@@ -1,10 +1,4 @@
-package test.matrix
-{
-	/**
-	 * @author Andre Michelle
-	 */
-	public interface IMatrixModelObserver
-	{
-		function onMatrixModelChanged( model: MatrixModel ): void;
-	}
-}
+This is the class IMatrixModelObserver.
+
+if the matrix model is changed:
+	do something implementation-dependent with it

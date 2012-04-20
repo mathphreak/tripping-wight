@@ -1,45 +1,10 @@
-package test.generator
-{
-	import tonfall.core.BlockInfo;
-	import tonfall.core.Processor;
-	import tonfall.core.Signal;
-	import tonfall.core.SignalBuffer;
+Hello World in DSP
 
-	/**
-	 * Hello World in DSP
-	 * 
-	 * @author Andre Michelle
-	 */
-	public final class SinusProcessor extends Processor
-	{
-		public const output: SignalBuffer = new SignalBuffer();
-	
-		private var _frequency: Number;
-		private var _phase: Number;
+make a SignalBuffer for the output
 
-		public function SinusProcessor( frequency: Number = 220.0 )
-		{
-			_frequency = frequency;
-			_phase = 0.0;
-		}
+set the frequency from input and the phase to 0
 
-		override public function process( info: BlockInfo ) : void
-		{
-			var signal: Signal = output.current;
-	
-			var i: int = 0;
-			var n: int = info.numSignals;
-			
-			for( ; i < n ; ++i )
-			{
-				signal.l = signal.r = Math.sin( _phase * 2.0 * Math.PI );
-	
-				_phase += _frequency / 44100.0;
-	
-				signal = signal.next;
-			}
-	
-			output.advancePointer( info.numSignals );
-		}
-	}
-}
+to process a block:
+	for all signals in the block:
+		output left and right as sin(2pi * phase)
+		increment the phase based on frequency and sample rate

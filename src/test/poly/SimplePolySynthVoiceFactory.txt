@@ -1,22 +1,6 @@
-package test.poly
-{
-	import tonfall.core.TimeEventNote;
-	import tonfall.prefab.poly.IPolySynthVoice;
-	import tonfall.prefab.poly.IPolySynthVoiceFactory;
+Test implementation for a polyphonic synthesizer voice
 
-	/**
-	 * Test implementation for a polyphonic synthesizer voice
-	 * 
-	 * @author Andre Michelle
-	 */
-	public final class SimplePolySynthVoiceFactory
-		implements IPolySynthVoiceFactory
-	{
-		public static const INSTANCE: SimplePolySynthVoiceFactory = new SimplePolySynthVoiceFactory();
+make sure there's only one instance
 		
-		public function create( event: TimeEventNote ) : IPolySynthVoice
-		{
-			return new SimplePolySynthVoice();
-		}
-	}
-}
+when we're asked to create:
+	return a SimplePolySynthVoice
