@@ -1,155 +1,32 @@
-package tonfall.core
-{
-	/**
-	 * Stereo audio data linked list (looped)
-	 * 
-	 * @author Andre Michelle
-	 */
-	public final class SignalBuffer
-	{
-		private var _current: Signal;
-		private var _currentIndex: int;
-		private var _size: int;
-		
-		private var _vector: Vector.<Signal>;
-		
-		/**
-		 * @param size The size of the buffer to be created. If a negative value or zero is passed, the default blockSize is used.
-		 * 
-		 * @see Signal
-		 * @see blockSize
-		 */
-		public function SignalBuffer( size: int = 0 )
-		{
-			init( 0 >= size ? blockSize : size );
-		}
+Stereo audio data linked list (looped)
 
-		/**
-		 * @return The current signal within the block
-		 */
-		public function get current() : Signal
-		{
-			return _current;
-		}
-		
-		/**
-		 * Sets 'num' signals to zero (silent), beginning with internal current signal
-		 * 
-		 * @param num How many signals needs to be set to zero
-		 */
-		public function zero( num: int ): void
-		{
-			var signal: Signal = _current;
-			
-			for( var i: int = 0 ; i < num ; ++i )
-			{
-				signal.l =
-				signal.r = 0.0;
-				
-				signal = signal.next;
-			}
-		}
-		
-		/**
-		 * Multiply 'num' signals by gain, beginning with internal current signal
-		 * 
-		 * @param num How many signals to be multiplied
-		 * @param gain The factor to be multiplied
-		 */
-		public function multiply( num: int, gain: Number ): void
-		{
-			var signal: Signal = _current;
-			
-			for( var i: int = 0 ; i < num ; ++i )
-			{
-				signal.l *= gain;
-				signal.r *= gain;
-				
-				signal = signal.next;
-			}
-		}
-		
-		/**
-		 * @param index The index where to find the signal (wraps index)
-		 * @return A signal inside the buffer
-		 * 
-		 * @see Signal
-		 */
-		public function getSignalAt( index: int ): Signal
-		{
-			if( index < 0 )
-				index += _size;
-			else
-			if( index >= _size )
-				index -= _size;
-			
-			return _vector[index];
-		}
-		
-		/**
-		 * @param delta The offset of signals counting from currentIndex (wraps index)
-		 * @return The Signal at this offset
-		 */
-		public function deltaPointer( delta: int ): Signal
-		{
-			var index: int = _currentIndex + delta;
+keep track of the current signal
+and which one it is in the list
+and how long the list is
 
-			if( index < 0 )
-				index += _size;
-			else
-			if( index >= _size )
-				index -= _size;
+keep a real list of signals
+to set it up:
+	keep track of a head and a tail
 
-			return _vector[ index ];
-		}
+	set both of them, and the first element in the vector, to be silence
 
-		/**
-		 * Advance internal currentIndex
-		 * 
-		 * @param count The number of signals to advance (wraps index)
-		 */
-		public function advancePointer( count: int ): void
-		{
-			if( 0 == count )
-				return;
-			
-			_currentIndex += count;
+	while we need more signals to be long enough:
+		set the next element in the vector, and the next one after the tail, and the tail to be silence
 
-			if( _currentIndex < 0 )
-				_currentIndex += _size;
-			else
-			if( _currentIndex >= _size )
-				_currentIndex -= _size;
+	set the tail to point to the head as next, and set the current signal to the head
 
-			_current = _vector[ _currentIndex ];
-		}
+a SignalBuffer can't be longer than the block size
 
-		/**
-		 * @return The vector of signals
-		 */
-		public function get vector() : Vector.<Signal>
-		{
-			return _vector;
-		}
-		
-		private function init( length: int ): void
-		{
-			var head: Signal;
-			var tail:Signal;
+let people access the current signal
 
-			_vector = new Vector.<Signal>( length, true );
+let people set the next however many signals to silent
 
-			tail = head = _vector[0] = new Signal();
+let people multiply the next however many signals by a gain factor
 
-			for( var i: int = 1; i < length ; ++i )
-			{
-				tail = tail.next = _vector[i] = new Signal();
-			}
+let people get the signal at an index, wrapping the index once to fit within our private list
 
-			_current = tail.next = head;
+let people get the signal that's however many away from this one
 
-			_currentIndex = 0;
-			_size = length;
-		}
-	}
-}
+let people advance the current state by however many signals, wrapping to fit
+
+let people get the list of signals

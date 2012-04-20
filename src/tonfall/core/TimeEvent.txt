@@ -1,14 +1,4 @@
-package tonfall.core
-{
-	/**
-	 * TimeEvent is the base class of all type of events while audio processing
-	 * 
-	 * @author Andre Michelle
-	 */
-	public class TimeEvent
-	{
-		public var barPosition: Number; // in bars
+TimeEvent is the base class of all type of events while audio processing
 
-		public function dispose() : void {}
-	}
-}
+a TimeEvent has a position
+and it can be destroyed

@@ -1,78 +1,34 @@
-package tonfall.core
-{
-	/**
-	 * SignalProcessor provides sample-exact event processing.
-	 * 
-	 * When a TimeEvent (like a note) is located for processing inside current block,
-	 * the SignalProcessor ensures that the event will be executed at proper position.
-	 * 
-	 * @author Andre Michelle
-	 * @see Signal
-	 * @see SignalBuffer
-	 * @see Processor
-	 * @see BlockInfo
-	 */
-	public /*abstract*/ class SignalProcessor extends Processor
-	{
-		public function SignalProcessor() {}
+SignalProcessor provides sample-exact event processing.
+When a TimeEvent (like a note) is located for processing inside current block,
+the SignalProcessor ensures that the event will be executed at proper position.
 
-		final override public function process( info: BlockInfo ) : void
-		{
-			var event: TimeEvent;
-			
-			var localIndex:int = 0;
+when we're asked to process a block:
+	var event: TimeEvent;
+	
+	var localIndex:int = 0;
 
-			var remaining: int = info.numSignals;
+	var remaining: int = info.numSignals;
 
-			var eventOffset: int;
+	var eventOffset: int;
 
-			while( events.length ) // if events located
-			{
-				event = events.shift(); // check first
-
-				eventOffset = engine.deltaBlockIndexAt( event.barPosition ) - localIndex; // offset in numSignals
-				
-				if( 0 < eventOffset ) // if signal processing needed
-				{
-					// process signals
-					processSignals( eventOffset );
-
-					// advance in buffer locally
-					remaining -= eventOffset;
-					localIndex += eventOffset;
-				}
-				
-				// execute event
-				processTimeEvent( event );
-				
-				event.dispose();
-			}
-
-			if( remaining )
-			{
-				// process rest of block
-				processSignals( remaining );
-			}
-		}
+	while we have more events:
+		peel off the first one
 		
-		/**
-		 * This method will be called whenever a received TimeEvent needs to be executed.
-		 * 
-		 * @param event The TimeEvent to be executed.
-		 */
-		protected function processTimeEvent( event: TimeEvent ): void
-		{
-			throw new Error( 'Method "processTimeEvent" is marked abstract.' );
-		}
+		figure out how many signals until the event starts
 		
-		/**
-		 * This method will be called when audio processing must be done.
-		 * 
-		 * @param numSignals The number of signals that needs to be processed.
-		 */
-		protected function processSignals( numSignals: int ): void
-		{
-			throw new Error( 'Method "processSignals" is marked abstract.' );
-		}
-	}
-}
+		if the event hasn't started yet:
+			process enough signals to get there
+			mark that we've gone that far
+		
+		process the event itself
+		
+		get rid of the event
+
+	if there are more samples in the block:
+		process them too
+
+if we're asked to process an event:
+	refuse -- this is a generic SignalProcessor
+
+if we're asked to process some signals:
+	refuse -- this is a generic SignalProcessor

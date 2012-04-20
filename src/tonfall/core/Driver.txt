@@ -1,132 +1,29 @@
-package tonfall.core
-{
-	import flash.events.SampleDataEvent;
-	import flash.media.Sound;
-	import flash.media.SoundChannel;
-	import flash.utils.ByteArray;
+Standard audio driver running on flash.media.Sound
 
-	/**
-	 * Standard audio driver running on flash.media.Sound
-	 * 
-	 * @author Andre Michelle
-	 */
-	public final class Driver
-	{
-		public static function getInstance(): Driver
-		{
-			if( null == instance )
-			{
-				instance = new Driver();
-			}
-			
-			return instance;
-		}
+limit one Driver in existence
 
-		private static var instance: Driver = null;
-		
-		private const sound: Sound = new Sound();
-		
-		private const zeroBytes: ByteArray = new ByteArray();
-		private const fillBytes: ByteArray = new ByteArray();
+keep track of a sound
 
-		private var _engine: Engine;
-		private var _soundChannel: SoundChannel;
-		private var _latency: Number = 0.0;
-		private var _running: Boolean;
+make an array of silence
+make an array to buffer sound
 
-		public function Driver()
-		{
-			if( instance != null )
-			{
-				throw new Error( 'AudioDriver is Singleton.' );
-			}
+keep track of the engine
+keep track of a sound channel
+keep track of latency
+keep track of if we're running
 
-			zeroBytes.length = blockSize << 3;
-			fillBytes.length = blockSize << 3;
+set the sound channel to play the sound
+mark that we're running
 
-			sound.addEventListener( SampleDataEvent.SAMPLE_DATA, sampleData );
-		}
+we can get the sound channel's left and right peak -- whatever that means
 
-		public function get engine() : Engine
-		{
-			return _engine;
-		}
+when we get in data:
+	if we have ever been running:
+		compute the latency of audio
 
-		public function set engine( value: Engine ) : void
-		{
-			_engine = value;
-		}
+	if we don't have an engine, or if we're not running:
+		output silence
+	otherwise:
+		ask the engine to render some audio
 
-		public function get latency() : Number
-		{
-			return _latency;
-		}
-		
-		public function get leftPeak(): Number
-		{
-			if( null == _soundChannel ) return 0.0;
-			
-			return _soundChannel.leftPeak;
-		}
-		
-		public function get rightPeak(): Number
-		{
-			if( null == _soundChannel ) return 0.0;
-			
-			return _soundChannel.rightPeak;
-		}
-		
-		public function init() : void
-		{
-			if ( null != _soundChannel )
-			{
-				throw new Error( 'Cannot inited twice.' );
-			}
-			
-			_soundChannel = sound.play();
-			
-			_running = true;
-		}
-
-		public function get running(): Boolean
-		{
-			return _running;
-		}
-
-		public function set running( running: Boolean ): void
-		{
-			_running = running;
-		}
-		
-		private function sampleData( event: SampleDataEvent ) : void
-		{
-			if( _soundChannel != null )
-			{
-				// Compute difference from writing and audible audio data
-				_latency = event.position / 44.1 - _soundChannel.position;
-			}
-
-			if( _engine == null || !_running )
-			{
-				event.data.writeBytes( zeroBytes );
-			}
-			else
-			{
-				fillBytes.position = 0;
-
-				try
-				{
-					_engine.render( fillBytes );
-				}
-				catch( e: Error )
-				{
-					trace( 'Error while rendering Audio.', e.getStackTrace() );
-					
-					return; // SHUT DOWN
-				}
-
-				event.data.writeBytes( fillBytes );
-			}
-		}
-	}
-}
+		output that audio

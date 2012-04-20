@@ -33,103 +33,29 @@ when the sound finishes loading:
 		PolySynth out => master output
 		add to the engine's processors both things
 
-import tonfall.core.Engine;
-import tonfall.core.Memory;
-import tonfall.core.Signal;
-import tonfall.core.TimeConversion;
-import tonfall.core.TimeEvent;
-import tonfall.core.TimeEventNote;
-import tonfall.core.noteToFrequency;
-import tonfall.format.IAudioDecoder;
-import tonfall.prefab.poly.IPolySynthVoice;
-import tonfall.prefab.poly.IPolySynthVoiceFactory;
-import tonfall.util.ISoundSheet;
-
-final class SoundSheet
-	implements ISoundSheet
-{
-	public static const FREQUENCIES: Vector.<Number> = createFrequencyTable();
-
-	private static function createFrequencyTable(): Vector.<Number>
-	{
-		const table: Vector.<Number> = new Vector.<Number>( 11, true );
-		
-		for( var i: int = 0 ; i < 11 ; ++i )
-		{
-			table[i] = noteToFrequency( 36 + i * 6 );
-		}
-
-		return table;
-	}
+this is a SoundSheet:
+	keep a frequency table, start at 36 and up by 6 - 11 in total
 	
-	private var _decoder: IAudioDecoder;
+	keep a source sound
 
-	public function setDecoder( decoder: IAudioDecoder ): void
-	{
-		_decoder = decoder;
-	}
+	to get the index into the frequency table from an arbitrary frequency:
+		subtract 36 from the note, divide by six, add half, and truncate (or round?  AS default type conversion from float to int?)
 
-	public function getNearestKeyIndexByNote( note: int ): int
-	{
-		var index: int = ( note - 36.0 ) / 6.0 + 0.5;
+		constrain the index from 0 to 10
 
-		if( index < 0 )
-			index = 0;
-		else
-		if( index > 10 )
-			index = 10;
-			
-		return index;
-	}
+	to get the start position of a key:
+		multiply the key index by the sample rate
 
-	public function getFrequencyByKeyIndex( keyIndex: int ): Number
-	{
-		return FREQUENCIES[ keyIndex ];
-	}
+	to get the end position of a key:
+		add one to the key index and multiply it by the sample rate
 
-	public function get numSamplesEachKey(): Number
-	{
-		return 44100.0;
-	}
+this is a SoundSheetVoiceFactory:
+	if we're asked to create a voice:
+		create a SoundSheetVoice for the Sheet
 
-	public function get decoder(): IAudioDecoder
-	{
-		return _decoder;
-	}
-
-	public function getStartPositionFromKeyIndex( keyIndex: int ): Number
-	{
-		return keyIndex * numSamplesEachKey;
-	}
-
-	public function getEndPositionFromKeyIndex( keyIndex: int ): Number
-	{
-		return ( keyIndex + 1 ) * numSamplesEachKey;
-	}
-}
-
-final class SoundSheetVoiceFactory
-	implements IPolySynthVoiceFactory
-{
-	private var _sheet: ISoundSheet;
-
-	public function SoundSheetVoiceFactory( sheet: ISoundSheet )
-	{
-		_sheet = sheet;
-	}
-	
-	public function create( event: TimeEventNote ): IPolySynthVoice
-	{
-		return new SoundSheetVoice( _sheet );
-	}
-}
-
-final class SoundSheetVoice
-	implements IPolySynthVoice
-{
-	// Lazy envelope built
-	private const engine: Engine = Engine.getInstance();
-	private const RELEASE_DURATION: int = 8820; // 200ms
+this is a SoundSheetVoice
+	keep track of the engine
+	and have a 200ms release duration
 
 	private var _rate: Number;
 	private var _position: Number;
@@ -160,10 +86,6 @@ final class SoundSheetVoice
 		_velocity = TimeEventNote( event ).velocity;
 		
 		_envelopePointer = TimeConversion.barsToNumSamples( TimeEventNote( event ).barDuration, engine.bpm );
-	}
-
-	public function stop(): void
-	{
 	}
 
 	public function processAdd( current: Signal, numSignals: int ): Boolean

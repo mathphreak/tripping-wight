@@ -1,15 +1,5 @@
-package tonfall.core
-{
-	/**
-	 * Stereo audio data linked list item
-	 * 
-	 * @author Andre Michelle
-	 */
-	public final class Signal
-	{
-		public var l: Number = 0.0; // LEFT CHANNEL
-		public var r: Number = 0.0; // RIGHT CHANNEL
+Stereo audio data linked list item
 
-		public var next: Signal; // NEXT POINTER
-	}
-}
+we have a left and a right channel
+
+and we keep track of the next signal in line

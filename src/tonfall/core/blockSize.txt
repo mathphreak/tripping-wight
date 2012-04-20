@@ -1,11 +1,3 @@
-package tonfall.core
-{
-	/**
-	 * Tonfall only supports a static blockSize (number of signals to be processed each callback)
-	 * 
-	 * @see BlockInfo
-	 * 
-	 * @author Andre Michelle
-	 */
-	public const blockSize: int = 3072;
-}
+Tonfall only supports a static blockSize (number of signals to be processed each callback)
+
+the block size is ALWAYS 3072
