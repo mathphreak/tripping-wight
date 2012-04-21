@@ -1,3 +1,5 @@
+Some sort of bi-quadratic filter or something.  DSP isn't my cup of tea.
+
 package tonfall.dsp
 {
 	import tonfall.core.Signal;

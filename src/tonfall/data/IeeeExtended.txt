@@ -1,3 +1,5 @@
+This is really nasty, and so I've left it alone.
+
 /*
  * C O N V E R T   T O   I E E E   E X T E N D E D
  */

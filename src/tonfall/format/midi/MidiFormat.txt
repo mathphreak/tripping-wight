@@ -1,3 +1,6 @@
+Near as I can tell, this class converts a raw MIDI stream, header included, to a TimeEventContainer.
+That's pretty cool, but I don't want to wade through this right now.
+
 package tonfall.format.midi 
 {
 	import tonfall.core.TimeEventContainer;
@@ -7,7 +10,8 @@ package tonfall.format.midi
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Endian;
-	public final class MidiFormat
+
+	public final class MidiFormat
 	{
 		static public const TYPE_DESCRIPTION: Vector.<String> = new Vector.<String>( 3, true );
 		
