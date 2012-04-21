@@ -1,51 +1,40 @@
-package demo
+Demoes StereoMatrix (Does not interpolate)
+
+and I don't want to figure out StereoMatrix
+
+private const processor: StereoSine = new StereoSine();
+
+public function DemoStereoGain()
 {
-	import tonfall.display.AbstractApplication;
+	stage.addEventListener( Event.ENTER_FRAME, enterFrame );
+	
+	engine.processors.push( processor );
 
-	import flash.events.Event;
-
-	/**
-	 * Demoes StereoMatrix (Does not interpolate)
-	 * 
-	 * @author Andre Michelle
-	 */
-	[SWF(backgroundColor="#FFFFFF", frameRate="31", width="800", height="128")]
-	public final class DemoStereoGain extends AbstractApplication
-	{
-		private const processor: StereoSine = new StereoSine();
-		
-		public function DemoStereoGain()
-		{
-			stage.addEventListener( Event.ENTER_FRAME, enterFrame );
-			
-			engine.processors.push( processor );
-
-			engine.input = processor.output;
-		}
-		
-		override protected function resize( event: Event = null ): void
-		{
-			const wHalf: Number = stage.stageWidth * 0.5;
-			const height: Number = stage.stageHeight;
-
-			graphics.clear();
-			graphics.lineStyle( 0.0, 0xFF0000 );
-			graphics.moveTo( wHalf, 0.0 );
-			graphics.lineTo( wHalf, height );
-			
-			super.resize( event );
-		}
-
-		private function enterFrame( event: Event ): void
-		{
-			const wHalf: Number = stage.stageWidth * 0.5;
-
-			const pan: Number = ( mouseX - wHalf ) / wHalf;
-			
-			processor.matrix.linear( 0.5, pan );
-		}
-	}
+	engine.input = processor.output;
 }
+
+override protected function resize( event: Event = null ): void
+{
+	const wHalf: Number = stage.stageWidth * 0.5;
+	const height: Number = stage.stageHeight;
+
+	graphics.clear();
+	graphics.lineStyle( 0.0, 0xFF0000 );
+	graphics.moveTo( wHalf, 0.0 );
+	graphics.lineTo( wHalf, height );
+	
+	super.resize( event );
+}
+
+private function enterFrame( event: Event ): void
+{
+	const wHalf: Number = stage.stageWidth * 0.5;
+
+	const pan: Number = ( mouseX - wHalf ) / wHalf;
+	
+	processor.matrix.linear( 0.5, pan );
+}
+
 import tonfall.core.Signal;
 import tonfall.core.SignalBuffer;
 import tonfall.core.SignalProcessor;

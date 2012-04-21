@@ -1,83 +1,20 @@
-package tonfall.prefab.metronome
-{
-	import tonfall.core.BlockInfo;
-	import tonfall.core.Processor;
+Metronome Sequencer sends event every beat.
 
-	/**
-	 * Metronome Sequencer sends event every beat.
-	 * 
-	 * @author Andre Michelle
-	 */
-	public final class MetronomeSequencer extends Processor
-	{
-		private var _timeEventTarget: Processor;
-		
-		private var _upper: int = 4;
-		private var _lower: int = 4;
-		
-		public function MetronomeSequencer() {}
+keep a target
 
-		override public function process( info: BlockInfo ) : void
-		{
-			if( null == _timeEventTarget )
-				throw new Error( 'No event target defined.' );
-			
-			var position:Number = int( info.barFrom * _lower ) / _lower;
+keep the time signature
 
-			var beat:int;
-			var bar:int;
+to process a block:
+	make sure we have a target
+	
+	figure out how many measures have already happened
 
-			var event: MetronomeEvent;
+	while we haven't reached the end of the block:
+		if we have reached the start of the block:
+			figure out how many beats have happened
+			figure out how many bars that works out to
+			figure out how many beats through the bar we are
 
-			do
-			{
-				if( position >= info.barFrom )
-				{
-					beat = position * _lower;
-					bar  = int( beat / _upper );
-					beat %= _upper;
+			tell the target about a MetronomeEvent with the right properties
 
-					event = new MetronomeEvent();
-					event.barPosition = position;
-					event.bar = bar;
-					event.beat = beat;
-					
-					_timeEventTarget.addTimeEvent( event );
-				}
-
-				position += 1.0 / _lower;
-			}
-			while( position < info.barTo );
-		}
-
-		public function get upper() : int
-		{
-			return _upper;
-		}
-
-		public function set upper( value: int ) : void
-		{
-			_upper = value;
-		}
-
-		public function get lower() : int
-		{
-			return _lower;
-		}
-
-		public function set lower( value: int ) : void
-		{
-			_lower = value;
-		}
-
-		public function get timeEventTarget() : Processor
-		{
-			return _timeEventTarget;
-		}
-
-		public function set timeEventTarget( target: Processor ) : void
-		{
-			_timeEventTarget = target;
-		}
-	}
-}
+		move to the next beat

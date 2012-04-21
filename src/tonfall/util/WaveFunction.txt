@@ -1,86 +1,37 @@
-package tonfall.util
-{
-	/**
-	 * Creates basic waveforms
-	 * 
-	 * @author Andre Michelle
-	 */
-	public final class WaveFunction
-	{
-		/**
-		 * @param phase a value between zero and one
-		 * @return bipolar /\ waveform
-		 */
-		static public function biTriangle( phase : Number ) : Number
-		{
-			if( 0.5 > phase ) return phase * 4.0 - 1.0;
-			
-			return 3.0 - phase * 4.0;
-		}
+Creates basic waveforms
 
-		/**
-		 * @param phase a value between zero and one
-		 * @return bipolar ~ sinus
-		 */
-		static public function biSinus( phase : Number ) : Number
-		{
-			return Math.sin( phase * 2.0 * Math.PI );
-		}
+we can do /\ and ~ and /| and [ that range from either 0 to 1 or -1 to 1
 
-		/**
-		 * @param phase a value between zero and one
-		 * @return bipolar / sawtooth
-		 */
-		static public function biSawtooth( phase : Number ) : Number
-		{
-			return phase * 2.0 - 1.0;
-		}
+all of these require phase from 0 to 1
 
-		/**
-		 * @param phase a value between zero and one
-		 * @return bipolar [ square
-		 */
-		static public function biSquare( phase : Number, width : Number = 0.5 ) : Number
-		{
-			return phase < width ? 1.0 : -1.0;
-		}
-		
-		/**
-		 * @param phase a value between zero and one
-		 * @return normalized /\ waveform
-		 */
-		static public function normTriangle( phase : Number ) : Number
-		{
-			if( 0.5 > phase ) return phase * 2.0;
+to do /\ from -1 to 1:
+	if the phase is less than half:
+		return 4 * phase - 1
+	return 3 - 4 * phase
+	
+to do ~ from -1 to 1:
+	return sin(2pi * phase)
 
-			return 2.0 - phase * 2.0;
-		}
+to do /| from -1 to 1:
+	return 2 * phase - 1
 
-		/**
-		 * @param phase a value between zero and one
-		 * @return normalized ~ sinus
-		 */
-		static public function normSinus( phase : Number ) : Number
-		{
-			return Math.sin( phase * 2.0 * Math.PI ) * 0.5 + 0.5;
-		}
+to do [ from -1 to 1:
+	if the phase is less than the width:
+		return 1
+	return -1
 
-		/**
-		 * @param phase a value between zero and one
-		 * @return normalized / sawtooth
-		 */
-		static public function normSawtooth( phase : Number ) : Number
-		{
-			return phase;
-		}
+to do /\ from 0 to 1:
+	if the phase is less than half:
+		return 2 * phase
+	return 2 - 2 * phase
 
-		/**
-		 * @param phase a value between zero and one
-		 * @return normalized [ square
-		 */
-		static public function normSquare( phase : Number, width : Number = 0.5 ) : Number
-		{
-			return phase < width ? 1.0 : 0.0;
-		}
-	}
-}
+to do ~ from 0 to 1:
+	return sin(2pi * phase)/2 + 1/2
+	
+to do /| from 0 to 1:
+	return phase
+
+to do [ from 0 to 1:
+	if the phase is less than the width:
+		return 1
+	return 0
